@@ -1,5 +1,5 @@
 pico-8 cartridge // http://www.pico-8.com
-version 36
+version 38
 __lua__
 --main
 function _init()
@@ -234,7 +234,7 @@ function init_plyr()
 		stype="p",
 		x=60,
 		y=90,
-		speed=1.2,
+		speed=1,
 		hp=3,
 		hpmax=3,
 		box={x1=2,x2=5,y1=1,y2=6},
