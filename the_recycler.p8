@@ -741,6 +741,15 @@ end
 
 function vacuum(o)
 	o.y+=vcm.vspeed
+	if (o.x+o.box.x2
+					<
+					plyr.x+(vcm.box.x2/2)) then
+ 	o.x+=0.2
+ else if (o.x+o.box.x1
+					>
+					plyr.x+(vcm.box.x2/2))	then
+		o.x-=0.2
+	end end 							
 	if (o.y+o.box.y2)>=(plyr.y-1) then
 		--return 1 if is vacuumed
 		return 1
