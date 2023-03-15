@@ -1,6 +1,9 @@
 pico-8 cartridge // http://www.pico-8.com
 version 41
 __lua__
+--the recycler
+--by sreaz
+
 --main
 function _init()
 	state=0
@@ -364,23 +367,44 @@ function drw_plyr()
 end
 -->8
 --enemies
+function get_e(i)
+	local e={
+			stype="e",
+			x=flr(gap*i+8*(i-1)),
+			y=-flr(rnd(100)),
+			box={x1=0,x2=7,y1=0,y2=7},
+			flamespr=24,
+			flsh=0,
+			firerate=flr(rnd(250))+80,
+			timetosht=flr(rnd(100))+30,
+			speed=0,
+			hp=0,
+			sprt=nil
+	}
+	local r=flr(rnd(101))
+	if r>=0
+	and r<41 then
+		e.speed=0.4
+		e.hp=2
+		e.sprt=32
+	elseif r>=41
+	and r<81 then
+		e.speed=0.2
+		e.hp=3
+		e.sprt=33
+ elseif r>=81
+	and r<101 then
+		e.speed=0.1
+		e.hp=4
+		e.sprt=34
+	end
+	return e
+end
 
 function spwn_enemies(nb)
 	gap=(128-8*nb)/(nb+1)
 	for i=1,nb do
-		enemy={
-			stype="e",
-			x=flr(gap*i+8*(i-1)),
-			y=-flr(rnd(49)),
-			life=3,
-			speed=0.2,
-			hp=3,
-			box={x1=0,x2=7,y1=0,y2=7},
-			flamespr=24,
-			flsh=0,
-			firerate=flr(rnd(111))+80,
-			timetosht=flr(rnd(101))+30
-		}
+		enemy=get_e(i)
 		add(enemies,enemy)
 	end
 end
@@ -432,7 +456,7 @@ function drw_enemies()
 				pal(i,7)
 			end
 		end
-		spr(32,e.x,e.y)
+		spr(e.sprt,e.x,e.y)
 		spr(
 			e.flamespr,
 			e.x,
