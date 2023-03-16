@@ -236,13 +236,15 @@ function init_plyr()
 	plyr={
 		x=60,
 		y=90,
-		speed=1,
+		speed=0.95,
+		vspeed=0.50,
+		nspeed=0.95,
 		hp=3,
 		hpmax=3,
 		box={x1=2,x2=5,y1=1,y2=6},
 		sprt=0,
 		flamespr=16,
-		timetoshoot=11,
+		timetoshoot=12,
 		invul=0,
 		ammo=30,
 		ammomax=30,
@@ -303,8 +305,7 @@ function updt_plyr()
 	and isvcm==0 
 	and plyr.ammo>0 then
 		shoot(plyr,0)
-		plyr.timetoshoot=8
-		
+		plyr.timetoshoot=12
 		isshting=1
 	end
 	if (btn(❎)==false) isshting=0
@@ -763,6 +764,8 @@ end
 function updt_vcm()
 	if (plyr.hp<=0) isvcm=0
 	
+	if (isvcm==0) plyr.speed=plyr.nspeed
+	
 	if isvcm==0 
 	and vcm.energy<vcm.gemax then
 		vcm.energy+=vcm.chargspeed
@@ -773,6 +776,7 @@ function updt_vcm()
 	end
 	
 	if isvcm==1 then
+		plyr.speed=plyr.vspeed
 		vcm.energy-=vcm.dischargspeed
 		vcm.x=plyr.x
 		vcm.y=plyr.y-vcm.box.y2-1
