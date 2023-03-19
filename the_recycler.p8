@@ -102,11 +102,13 @@ function init_game()
 	init_vacumm_part()
  init_upgd()
 	scraps={}
+	init_dffclty()
+	
+	spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
 end
 
 function updt_game()
 	if hastochooseupgd==0 then
-		t+=1
 		
 		updt_stars()
 		updt_expls()
@@ -115,18 +117,22 @@ function updt_game()
 		updt_plyr()
 		updt_vcm()
 		updt_bullets()
+		updt_dffclty()
 		
+		if t%dffclty.e_spwn_time==0
+		   and need_increase_dffclty==false
+		   and need_drw_dffclty==false then
+			spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
+		end
 		
 		if timetogo<=0 
 		and plyr.hp<=0 
 		and chck_plyr_bllt()==0 then
 			state=2
 		end
-		if (timetogo>0) timetogo-=1
 		
-		if #enemies==0 then
-			spwn_enemies(flr(rnd(9))+1)
-		end
+		t+=1
+		if (timetogo>0) timetogo-=1
 	else--upgrade menu
 		updt_upgd()
 	end
@@ -150,6 +156,8 @@ function draw_game()
 	drw_vcm()
 	--bullets
 	drw_bullets()
+	--dffclty
+	drw_dffclty()
 	--** hud **
 	drw_hud()
 	--upgrade menu
@@ -389,7 +397,7 @@ function get_e()
 	if r>=0
 	and r<40 then
 		e.speed=0.3
-		e.hp=2
+		e.hp=2+dffclty.e_hp
 		e.sprt=32
 		e.scre=25
 		e.bsprt=49
@@ -401,7 +409,7 @@ function get_e()
 	elseif r>=40
 	and r<65 then
 		e.speed=0.2
-		e.hp=3
+		e.hp=3+dffclty.e_hp
 		e.sprt=33
 		e.scre=50
 		add(e.gun,{
@@ -417,7 +425,7 @@ function get_e()
  elseif r>=65
 	and r<85 then
 		e.speed=0.1
-		e.hp=4
+		e.hp=4+dffclty.e_hp
 		e.sprt=34
 		e.scre=100
 		add(e.gun,{
@@ -428,7 +436,7 @@ function get_e()
 	elseif r>=85
 	and r<100 then
 		e.speed=0.5
-		e.hp=4
+		e.hp=4+dffclty.e_hp
 		e.sprt=35
 		e.scre=200
 		add(e.gun,{
@@ -1115,6 +1123,94 @@ function apply_upgd(up)
 	up2=nil
 	curspos=nil
 end
+-->8
+--difficulty
+function init_dffclty()
+	need_increase_dffclty=false
+	need_drw_dffclty=false
+	t_2_increase_dffclty=1800
+	min_e_spwn_t=120
+	max_e_per_wave=10
+	dfflty_msg=nil
+	warning_duration=600
+	crrent_wrnng_time=0
+	dffclty={
+		e_spwn_time=480,
+		e_per_wave=2,
+		e_hp=0
+	}
+end
+
+function updt_dffclty()
+	if t%t_2_increase_dffclty==0 then
+		need_increase_dffclty=true
+	end
+	
+	if need_drw_dffclty then
+		crrent_wrnng_time+=1
+		if crrent_wrnng_time==warning_duration then
+			need_drw_dffclty=false
+			crrent_wrnng_time=0
+			dfflty_msg=nil
+		end
+	end
+	
+	if need_increase_dffclty
+	   and #enemies==0 then
+	   increase_dffclty()
+	end
+end
+
+function drw_dffclty()
+	if need_drw_dffclty then
+		print(
+			"warning",
+			h_txt_cntr("warning"),
+			30,
+			8
+		)
+		print(
+			dfflty_msg,
+			h_txt_cntr(dfflty_msg),
+			35,
+			8
+		)
+	end
+end
+
+function increase_dffclty()
+	
+	local dtype=nil
+	while dtype==nil do
+		dtype=flr(rnd(3))+1
+		if dtype==1
+				 and dffclty.e_spwn_time==min_e_spwn_t then
+				 dtype=nil
+		end
+		
+		if dtype==2
+				 and dffclty.e_per_wave==max_e_per_wave then
+				 dtype=nil
+		end
+	end
+	
+	if dtype==1 then
+		dfflty_msg="MORE ENEMY WAVE"
+		dffclty.e_spwn_time-=40
+		if (dffclty.e_spwn_time<min_e_spwn_t) dffclty.e_spwn_time=min_e_spwn_t
+	elseif dtype==2 then
+		dfflty_msg="MORE ENEMY PER WAVE"
+		dffclty.e_per_wave+=1
+		if (dffclty.e_per_wave<max_e_per_wave) dffclty.e_per_wave=max_e_per_wave
+	elseif dtype==3 then
+		dfflty_msg="ENEMY HP INCREASED"
+		dffclty.e_hp+=1
+	end
+	
+	need_drw_dffclty=true
+	need_increase_dffclty=false
+end
+
 __gfx__
 00066000000066000066000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 006ddd00000dd600006dd00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
