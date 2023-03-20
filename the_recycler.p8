@@ -610,7 +610,7 @@ function updt_bullets()
 			and plyr.invul<=0
 			and b.btype=="e" then
 				del(bullets,b)
-				plyr_take_dmg(1)
+				plyr_take_dmg(1+dffclty.e_dmg)
 			end
 			
 			if b.btype=="b" then
@@ -1137,7 +1137,8 @@ function init_dffclty()
 	dffclty={
 		e_spwn_time=480,
 		e_per_wave=2,
-		e_hp=0
+		e_hp=0,
+		e_dmg=0
 	}
 end
 
@@ -1182,7 +1183,7 @@ function increase_dffclty()
 	
 	local dtype=nil
 	while dtype==nil do
-		dtype=flr(rnd(3))+1
+		dtype=flr(rnd(4))+1
 		if dtype==1
 				 and dffclty.e_spwn_time==min_e_spwn_t then
 				 dtype=nil
@@ -1205,6 +1206,9 @@ function increase_dffclty()
 	elseif dtype==3 then
 		dfflty_msg="ENEMY HP INCREASED"
 		dffclty.e_hp+=1
+	elseif dtype==4 then
+		dfflty_msg="ENEMY DMG INCREASED"
+		dffclty.e_dmg+=1
 	end
 	
 	need_drw_dffclty=true
