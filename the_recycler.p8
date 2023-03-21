@@ -248,7 +248,7 @@ function init_plyr()
 	plyr={
 		x=60,
 		y=90,
-		speed=0.95,
+		speed=1,
 		vspeed=0.50,
 		nspeed=0.95,
 		hp=3,
@@ -389,12 +389,12 @@ end
 function get_e()
 	local e={
 			x=0,
-			y=-flr(rnd(100)),
+			y=-flr(rnd(61)+7),
 			box={x1=0,x2=7,y1=0,y2=7},
 			flamespr=24,
 			flsh=0,
-			firerate=flr(rnd(250))+80,
-			timetosht=flr(rnd(100))+30,
+			firerate=flr(rnd(201))+100,
+			timetosht=flr(rnd(51))+50,
 			speed,hp,scre=0,0,0,
 			sprt=nil,
 			gun={}
