@@ -103,6 +103,7 @@ function init_game()
  init_upgd()
 	scraps={}
 	init_dffclty()
+	time_2_spwn=0
 	
 	spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
 end
@@ -119,10 +120,11 @@ function updt_game()
 		updt_bullets()
 		updt_dffclty()
 		
-		if t%dffclty.e_spwn_time==0
+		if time_2_spwn>=dffclty.e_spwn_time
 		   and need_increase_dffclty==false
 		   and need_drw_dffclty==false then
 			spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
+			time_2_spwn=0		
 		end
 		
 		if timetogo<=0 
@@ -132,6 +134,10 @@ function updt_game()
 		end
 		
 		t+=1
+		if need_increase_dffclty==false
+		   and need_drw_dffclty==false then
+		   time_2_spwn+=1
+		end
 		if (timetogo>0) timetogo-=1
 	else--upgrade menu
 		updt_upgd()
@@ -590,7 +596,7 @@ end
 function updt_bullets()
 	for b in all(bullets) do
 		b.x += b.speed * sin(b.angl/360)
- 	b.y += b.speed * cos(b.angl/360)
+		b.y += b.speed * cos(b.angl/360)
 		if b.y < -7 
 		or b.y > 135 then
 			del(bullets,b)
@@ -1128,14 +1134,15 @@ end
 function init_dffclty()
 	need_increase_dffclty=false
 	need_drw_dffclty=false
-	t_2_increase_dffclty=1800
+	t_2_increase_dffclty=0
+	dffclty_duration=2000
 	min_e_spwn_t=120
 	max_e_per_wave=10
 	dfflty_msg=nil
-	warning_duration=600
+	warning_duration=280
 	crrent_wrnng_time=0
 	dffclty={
-		e_spwn_time=480,
+		e_spwn_time=600,
 		e_per_wave=2,
 		e_hp=0,
 		e_dmg=0
@@ -1143,16 +1150,23 @@ function init_dffclty()
 end
 
 function updt_dffclty()
-	if t%t_2_increase_dffclty==0 then
+	if t_2_increase_dffclty==dffclty_duration then
 		need_increase_dffclty=true
+		t_2_increase_dffclty=0
 	end
 	
+	if need_drw_dffclty==false
+	   and need_increase_dffclty==false then
+		t_2_increase_dffclty+=1
+	end
+		
 	if need_drw_dffclty then
 		crrent_wrnng_time+=1
 		if crrent_wrnng_time==warning_duration then
 			need_drw_dffclty=false
 			crrent_wrnng_time=0
 			dfflty_msg=nil
+			time_2_spwn=dffclty.e_spwn_time-120
 		end
 	end
 	
