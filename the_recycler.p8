@@ -210,21 +210,21 @@ end
 
 function create_stars()
 	stars={}
-	for i=1,20 do
+	for i=1,30 do
 		star={
-			x=rnd(128),
+			x=flr(rnd(128)),
 			y=rnd(128),
 			col=13,
-			speed=0.75
+			speed=0.80
 		}
 		add(stars,star)
 	end
-	for i=1,10 do
+	for i=1,12 do
 		star={
 			x=rnd(128),
 			y=rnd(128),
 			col=7,
-			speed=3
+			speed=2.80
 		}
 		add(stars,star)
 	end
@@ -234,8 +234,8 @@ function updt_stars()
 	for s in all(stars) do 
 		s.y+=s.speed	
 		if s.y >= 128 then
-			s.y=-rnd(60)
-			s.x=rnd(128)
+			s.y=-flr(rnd(128))
+			s.x=flr(rnd(128))
 		end
 	end
 end
