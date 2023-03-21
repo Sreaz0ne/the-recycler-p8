@@ -1177,19 +1177,27 @@ function updt_dffclty()
 end
 
 function drw_dffclty()
-	if need_drw_dffclty then
+
+	if need_drw_dffclty 
+				and sin(crrent_wrnng_time/60)<0.4 then
+		spr(96,02,23,2,2)
+		spr(98,16,23,2,2)
+		spr(96,30,23,2,2,true)
 		print(
 			"warning",
 			h_txt_cntr("warning"),
-			30,
+			29,
 			8
 		)
 		print(
 			dfflty_msg,
 			h_txt_cntr(dfflty_msg),
-			35,
+			42,
 			8
 		)
+		spr(96,81,23,2,2)
+		spr(98,95,23,2,2)
+		spr(96,109,23,2,2,true)
 	end
 end
 
@@ -1210,18 +1218,18 @@ function increase_dffclty()
 	end
 	
 	if dtype==1 then
-		dfflty_msg="MORE ENEMY WAVE"
+		dfflty_msg="ENEMIES COME MORE OFTEN"
 		dffclty.e_spwn_time-=40
 		if (dffclty.e_spwn_time<min_e_spwn_t) dffclty.e_spwn_time=min_e_spwn_t
 	elseif dtype==2 then
-		dfflty_msg="MORE ENEMY PER WAVE"
+		dfflty_msg="MORE ENNEMIES COME"
 		dffclty.e_per_wave+=1
 		if (dffclty.e_per_wave<max_e_per_wave) dffclty.e_per_wave=max_e_per_wave
 	elseif dtype==3 then
-		dfflty_msg="ENEMY HP INCREASED"
+		dfflty_msg="ENEMIES ARE MORE RESISTANT"
 		dffclty.e_hp+=1
 	elseif dtype==4 then
-		dfflty_msg="ENEMY DMG INCREASED"
+		dfflty_msg="ENEMIES ARE MORE STRONGER"
 		dffclty.e_dmg+=1
 	end
 	
