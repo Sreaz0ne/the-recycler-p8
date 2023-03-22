@@ -166,6 +166,10 @@ function draw_game()
 	drw_dffclty()
 	--** hud **
 	drw_hud()
+	--vacummed object infos
+	for i in all(vcminfos) do
+		print(i.msg,i.x,i.y,i.col)
+	end
 	--upgrade menu
 	drw_upgd()
 end
@@ -631,6 +635,14 @@ function updt_bullets()
 				local vacuumed=vacuum(b)
 				if vacuumed==1 then
 					plyr.ammo+=b.ammo
+					add(vcminfos,{
+						msg="+"..tostr(b.ammo),
+						x=1,
+						y=56,
+						col=3,
+						speed=-0.15,
+						t=0
+					})
 					if (plyr.ammo>plyr.ammomax) plyr.ammo=plyr.ammomax
 					del(bullets,b)
 				end
@@ -837,6 +849,7 @@ function init_vacumm_part()
 		needfullcharg=0
 	}
 	vcmpart={}
+	vcminfos={}
 	vcm.y=plyr.y-vcm.box.y2-1
 	vcm.energy=vcm.gemax
 	for i=1,25 do
@@ -892,6 +905,14 @@ function updt_vcm()
 			vcm.energy=0
 			vcm.needfullcharg=1
 		end
+	end
+	
+	for i in all(vcminfos) do
+		i.y+=i.speed
+		i.t+=1
+		if (i.t>18) i.col=6
+		if (i.t>28) i.col=7
+		if(i.t==40) del(vcminfos,i)
 	end
 end
 
@@ -963,9 +984,25 @@ function updt_scraps()
 			local vacuumed=vacuum(s)
 			if vacuumed==1 then
 				plyr.scraps+=1
+				add(vcminfos,{
+						msg="+1",
+						x=120,
+						y=8,
+						col=5,
+						speed=0.15,
+						t=0
+					})
 				if s.typ=="h"
 				and plyr.hp<plyr.hpmax then
 				 plyr.hp+=1
+					add(vcminfos,{
+						msg="+1",
+						x=1,
+						y=8,
+						col=8,
+						speed=0.15,
+						t=0
+					})
 				end
 				if plyr.scraps==plyr.smax then
 					lvl_up()
