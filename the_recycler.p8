@@ -635,16 +635,24 @@ function updt_bullets()
 			and isvcm==1 then
 				local vacuumed=vacuum(b)
 				if vacuumed==1 then
-					plyr.ammo+=b.ammo
-					add(vcminfos,{
-						msg="+"..tostr(b.ammo),
-						x=1,
-						y=56,
-						col=3,
-						speed=-0.15,
-						t=0
-					})
-					if (plyr.ammo>plyr.ammomax) plyr.ammo=plyr.ammomax
+					local ammogiven=0
+					local diffammo=plyr.ammomax-plyr.ammo
+					if diffammo>b.ammo then
+						ammogiven=b.ammo
+					else
+						ammogiven=diffammo
+					end
+					if ammogiven>0 then
+						plyr.ammo+=ammogiven
+						add(vcminfos,{
+							msg="+"..tostr(ammogiven),
+							x=1,
+							y=56,
+							col=3,
+							speed=-0.15,
+							t=0
+						})
+					end
 					del(bullets,b)
 				end
 			end
