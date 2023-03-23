@@ -1308,7 +1308,7 @@ function increase_dffclty()
 	elseif dtype==2 then
 		dfflty_msg="MORE ENNEMIES COME"
 		dffclty.e_per_wave+=1
-		if (dffclty.e_per_wave<max_e_per_wave) dffclty.e_per_wave=max_e_per_wave
+		if (dffclty.e_per_wave>max_e_per_wave) dffclty.e_per_wave=max_e_per_wave
 	elseif dtype==3 then
 		dfflty_msg="ENEMIES ARE MORE RESISTANT"
 		dffclty.e_hp+=1
