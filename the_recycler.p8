@@ -356,7 +356,7 @@ function plyr_take_dmg(dmg)
 	if plyr.invul<=0 then
 		plyr.hp-=dmg
 		if plyr.hp <= 0 then
-			explod(plyr.x+4,plyr.y+4)
+			explod_shp(plyr.x+4,plyr.y+4)
 			--time to game over
 			timetogo=80
 		else
@@ -500,7 +500,7 @@ function e_take_dmg(e,dmg)
 	e.hp-=dmg
 	e.flsh=4
 	if e.hp <= 0 then
-		explod(e.x+4,e.y+4)
+		explod_shp(e.x+4,e.y+4)
 		add_scrap(e.x,e.y,e.speed)
 		score+=e.scre
 		del(enemies,e)
@@ -626,7 +626,8 @@ function updt_bullets()
 			if b.btype=="b" then
 				b.time_2_expld-=1
 				if b.time_2_expld<=0 then
-					expld_bomb(b)
+					bomb_expld(b)
+					explod_bomb(b.x+3.5,b.y+3.5)
 				end
 			end
 			
@@ -659,7 +660,7 @@ function chck_plyr_bllt()
 	end
 end
 
-function expld_bomb(b)
+function bomb_expld(b)
 	bb=get_btype(56)
 	local angle=0
 	for i=1,12 do
@@ -772,8 +773,11 @@ function drw_hud()
 end
 -->8
 --explosions
-function explod(ex,ey)
-	local expl={}
+function explod_shp(ex,ey)
+	local expl={
+		etype="s",
+		prts={}
+	}
 	local prt={
 		x=ex,
 		y=ey,
@@ -785,7 +789,7 @@ function explod(ex,ey)
 		sz=9
 	}
 	
-	add(expl,prt)
+	add(expl.prts,prt)
 	for i=1,30 do
 		local prt={
 			x=ex,
@@ -798,39 +802,62 @@ function explod(ex,ey)
 			sz=rnd(4)+1
 		}
 		
-		add(expl,prt)
+		add(expl.prts,prt)
 	end
+	add(expls,expl)
+end
+
+function explod_bomb(ex,ey)
+	local expl={
+		etype="b",
+		x=ex,
+		y=ey,
+		timer=0
+	}
 	add(expls,expl)
 end
 
 function updt_expls()
 	for e in all(expls) do
-		for p in all(e) do
-			p.x+=p.sx
-			p.y+=p.sy
-			p.sx=p.sx*0.87
-			p.sy=p.sy*0.87
-			
-			if (p.age>4) p.colr=10
-			if (p.age>7) p.colr=9
-			if (p.age>11) p.colr=8
-			if (p.age>16) p.colr=2
-			if (p.age>20) p.colr=5
-			
-			p.age+=1
-			if p.age>p.mxage then
-				p.sz-=0.2
-				if (p.sz<=0) del(e,p)
+		if e.etype=="s" then
+			for p in all(e.prts) do
+				p.x+=p.sx
+				p.y+=p.sy
+				p.sx=p.sx*0.87
+				p.sy=p.sy*0.87
+				
+				if (p.age>4) p.colr=10
+				if (p.age>7) p.colr=9
+				if (p.age>11) p.colr=8
+				if (p.age>16) p.colr=2
+				if (p.age>20) p.colr=5
+				
+				p.age+=1
+				if p.age>p.mxage then
+					p.sz-=0.2
+					if (p.sz<=0) del(e.prts,p)
+				end
+			end
+			if (#e.prts==0) del(expls,e)
+		end
+		if e.etype=="b" then
+			e.timer+=1
+			if e.timer==16 then
+				del(expls,e)
 			end
 		end
-		if (#e==0) del(expls,e)
 	end
 end
 
 function drw_expls()
 	for e in all(expls) do
-		for p in all(e) do
-			circfill(p.x,p.y,p.sz,p.colr)
+		if e.etype=="s" then
+			for p in all(e.prts) do
+				circfill(p.x,p.y,p.sz,p.colr)
+			end
+		end
+		if e.etype=="b" then
+			circ(e.x,e.y,e.timer/3,8+e.timer%3)
 		end
 	end
 end
