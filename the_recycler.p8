@@ -543,8 +543,8 @@ function get_btype(sprt)
 			btype="e",
 			sprt=49,
 			box={x1=3,x2=4,y1=5,y2=7},
-			speed=0.6,
-			ammo=2,
+			speed=0.65,
+			ammo=4,
 			angl=0
 		}
 	elseif sprt==54 then
@@ -552,8 +552,8 @@ function get_btype(sprt)
 			btype="e",
 			sprt=54,
 			box={x1=2,x2=5,y1=4,y2=7},
-			speed=0.7,
-			ammo=4,
+			speed=0.75,
+			ammo=8,
 			angl=0
 		}
 	elseif sprt==55 then
@@ -562,7 +562,7 @@ function get_btype(sprt)
 			sprt=55,
 			box={x1=2,x2=5,y1=2,y2=5},
 			speed=0.05,
-			ammo=10,
+			ammo=15,
 			time_2_expld=240,
 			angl=0
 		}
@@ -571,8 +571,8 @@ function get_btype(sprt)
 			btype="e",
 			sprt=56,
 			box={x1=2,x2=5,y1=2,y2=5},
-			speed=0.6,
-			ammo=1
+			speed=0.65,
+			ammo=2
 		}
 	end
 	return b
