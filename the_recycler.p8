@@ -1277,7 +1277,7 @@ function updt_dffclty()
 			need_drw_dffclty=false
 			crrent_wrnng_time=0
 			dfflty_msg=nil
-			time_2_spwn=dffclty.e_spwn_time-120
+			time_2_spwn=dffclty.e_spwn_time-60
 		end
 	end
 	
