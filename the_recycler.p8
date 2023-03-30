@@ -113,7 +113,7 @@ function init_game()
 	init_dffclty()
 	time_2_spwn=0
 	
-	spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
+	spwn_enemies(dffclty.e_per_wave)
 end
 
 function updt_game()
@@ -131,7 +131,7 @@ function updt_game()
 		if time_2_spwn>=dffclty.e_spwn_time
 		   and need_increase_dffclty==false
 		   and need_drw_dffclty==false then
-			spwn_enemies(flr(rnd(dffclty.e_per_wave))+1)
+			spwn_enemies(dffclty.e_per_wave)
 			time_2_spwn=0		
 		end
 		
