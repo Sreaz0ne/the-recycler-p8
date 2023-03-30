@@ -367,7 +367,7 @@ function plyr_take_dmg(dmg)
 		if plyr.hp <= 0 then
 			explod_shp(plyr.x+4,plyr.y+4)
 			--time to game over
-			timetogo=80
+			timetogo=120
 		else
 			plyr.invul=120
 		end
