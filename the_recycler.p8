@@ -1260,7 +1260,8 @@ function init_dffclty()
 end
 
 function updt_dffclty()
-	if t_2_increase_dffclty==dffclty_duration then
+	if t_2_increase_dffclty==dffclty_duration
+	   and plyr.hp>0 then
 		need_increase_dffclty=true
 		t_2_increase_dffclty=0
 	end
