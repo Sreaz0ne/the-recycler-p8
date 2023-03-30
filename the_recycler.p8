@@ -85,9 +85,15 @@ function draw_title()
 
 	print(
 		strtstr,
+		h_txt_cntr(strtstr)+1,
+		v_txt_cntr()+41,
+		3
+	)
+	print(
+		strtstr,
 		h_txt_cntr(strtstr),
 		v_txt_cntr()+40,
-		6
+		11
 	)
 end
 
