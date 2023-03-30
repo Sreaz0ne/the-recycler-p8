@@ -321,7 +321,7 @@ function updt_plyr()
 		plyr.y-=plyr.speed
 	end
 	if btn(⬇️)
-	and plyr.y+plyr.speed<=120 then
+	and plyr.y+plyr.speed<=121 then
 		plyr.y+=plyr.speed
 	end
 	
