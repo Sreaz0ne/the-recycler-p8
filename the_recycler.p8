@@ -608,65 +608,83 @@ end
 
 function updt_bullets()
 	for b in all(bullets) do
-		b.x += b.speed * sin(b.angl/360)
-		b.y += b.speed * cos(b.angl/360)
-		if b.y < -7 
-		or b.y > 135 then
+		if coll(b,vcm) 
+			  and isvcm==1
+			  and (b.btype=="e" 
+			      or b.btype=="b") then
+			  local sd=1
+			  if b.angl>90
+			  and b.angl<270 then
+			  	sd=2
+			  else
+			  	sd=1.8
+			  end
+			b.x += b.speed/sd * sin(b.angl/360)
+			b.y += b.speed/sd * cos(b.angl/360)
+		else
+			b.x += b.speed * sin(b.angl/360)
+			b.y += b.speed * cos(b.angl/360)
+		end
+		if b.y<-7 
+		or b.y>135
+		or b.x<-7 
+		or b.x>135 then
 			del(bullets,b)
 		end
 		
-		if b.btype=="p" then
-			for e in all(enemies) do
-				if coll(b,e) then
-					del(bullets,b)
-					e_take_dmg(e,plyr.dmg)
+		if coll(b,vcm) 
+		  and isvcm==1
+		  and (b.btype=="e" 
+			     or b.btype=="b") then
+			local vacuumed=vacuum(b)
+			if vacuumed==1 then
+				local ammogiven=0
+				local diffammo=plyr.ammomax-plyr.ammo
+				if diffammo>b.ammo then
+					ammogiven=b.ammo
+				else
+					ammogiven=diffammo
 				end
-			end
-		elseif b.btype=="e" 
-		    or b.btype=="b" then
-			if coll(b,plyr) 
-			and plyr.hp>0 
-			and plyr.invul<=0
-			and b.btype=="e" then
+				if ammogiven>0 then
+					plyr.ammo+=ammogiven
+					add(vcminfos,{
+						msg="+"..tostr(ammogiven),
+						x=1,
+						y=56,
+						col=3,
+						speed=-0.15,
+						t=0
+					})
+				end
 				del(bullets,b)
-				plyr_take_dmg(1+dffclty.e_dmg)
 			end
-			
-			if b.btype=="b" then
-				b.time_2_expld-=1
-				if b.time_2_expld<=0 then
-					bomb_expld(b)
-					explod_bomb(b.x+3.5,b.y+3.5)
+		else
+			if b.btype=="p" then
+				for e in all(enemies) do
+					if coll(b,e) then
+						del(bullets,b)
+						e_take_dmg(e,plyr.dmg)
+					end
 				end
-			end
-			
-			if coll(b,vcm) 
-			and isvcm==1 then
-				local vacuumed=vacuum(b)
-				if vacuumed==1 then
-					local ammogiven=0
-					local diffammo=plyr.ammomax-plyr.ammo
-					if diffammo>b.ammo then
-						ammogiven=b.ammo
-					else
-						ammogiven=diffammo
+			elseif b.btype=="e" 
+			    or b.btype=="b" then
+				if coll(b,plyr) 
+				and plyr.hp>0 
+				and plyr.invul<=0
+				and b.btype=="e" then
+					
+					plyr_take_dmg(1+dffclty.e_dmg)
+				end
+				
+				if b.btype=="b" then
+					b.time_2_expld-=1
+					if b.time_2_expld<=0 then
+						bomb_expld(b)
+						explod_bomb(b.x+3.5,b.y+3.5)
 					end
-					if ammogiven>0 then
-						plyr.ammo+=ammogiven
-						add(vcminfos,{
-							msg="+"..tostr(ammogiven),
-							x=1,
-							y=56,
-							col=3,
-							speed=-0.15,
-							t=0
-						})
-					end
-					del(bullets,b)
 				end
 			end
 		end
-		
 	end
 end
 
