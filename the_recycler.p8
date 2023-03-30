@@ -1283,7 +1283,16 @@ function updt_dffclty()
 	
 	if need_increase_dffclty
 	   and #enemies==0 then
-	   increase_dffclty()
+	   local be=false
+	   for b in all(bullets) do
+	   	if b.btype=="b"
+	   	   or b.btype=="e" then
+	   	   be=true
+	   	   break
+	   	end
+	   end
+	   
+	   if (be==false) increase_dffclty()
 	end
 end
 
