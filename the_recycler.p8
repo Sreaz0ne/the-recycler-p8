@@ -260,8 +260,8 @@ function init_plyr()
 	plyr={
 		x=60,
 		y=90,
-		speed=1,
-		vspeed=0.50,
+		speed=1.25,
+		vspeed=0.40,
 		nspeed=0.95,
 		hp=3,
 		hpmax=3,
@@ -406,7 +406,7 @@ function get_e()
 			box={x1=0,x2=7,y1=0,y2=7},
 			flamespr=24,
 			flsh=0,
-			firerate=flr(rnd(201))+100,
+			firerate=flr(rnd(151))+100,
 			timetosht=flr(rnd(51))+50,
 			speed,hp,scre=0,0,0,
 			sprt=nil,
@@ -415,7 +415,7 @@ function get_e()
 	local r=flr(rnd(100))
 	if r>=0
 	and r<40 then
-		e.speed=0.3
+		e.speed=0.4
 		e.hp=2+dffclty.e_hp
 		e.sprt=32
 		e.scre=25
@@ -427,7 +427,7 @@ function get_e()
 		})
 	elseif r>=40
 	and r<65 then
-		e.speed=0.2
+		e.speed=0.3
 		e.hp=3+dffclty.e_hp
 		e.sprt=33
 		e.scre=50
@@ -443,7 +443,7 @@ function get_e()
 		})
  elseif r>=65
 	and r<85 then
-		e.speed=0.1
+		e.speed=0.2
 		e.hp=4+dffclty.e_hp
 		e.sprt=34
 		e.scre=100
@@ -551,7 +551,7 @@ function get_btype(sprt)
 			btype="e",
 			sprt=49,
 			box={x1=3,x2=4,y1=5,y2=7},
-			speed=0.65,
+			speed=1.05,
 			ammo=4,
 			angl=0
 		}
@@ -560,7 +560,7 @@ function get_btype(sprt)
 			btype="e",
 			sprt=54,
 			box={x1=2,x2=5,y1=4,y2=7},
-			speed=0.75,
+			speed=1.15,
 			ammo=8,
 			angl=0
 		}
@@ -579,7 +579,7 @@ function get_btype(sprt)
 			btype="e",
 			sprt=56,
 			box={x1=2,x2=5,y1=2,y2=5},
-			speed=0.65,
+			speed=1.05,
 			ammo=2
 		}
 	end
@@ -1253,7 +1253,7 @@ function init_dffclty()
 	crrent_wrnng_time=0
 	dffclty={
 		e_spwn_time=600,
-		e_per_wave=2,
+		e_per_wave=4,
 		e_hp=0,
 		e_dmg=0
 	}
