@@ -260,9 +260,9 @@ function init_plyr()
 	plyr={
 		x=60,
 		y=90,
-		speed=1.25,
-		vspeed=0.40,
-		nspeed=0.95,
+		speed=1.1,
+		vspeed=0.4,
+		nspeed=1.1,
 		hp=3,
 		hpmax=3,
 		box={x1=2,x2=5,y1=1,y2=6},
@@ -615,9 +615,9 @@ function updt_bullets()
 			  local sd=1
 			  if b.angl>90
 			  and b.angl<270 then
-			  	sd=2
+			  	sd=2.2
 			  else
-			  	sd=1.8
+			  	sd=2
 			  end
 			b.x += b.speed/sd * sin(b.angl/360)
 			b.y += b.speed/sd * cos(b.angl/360)
