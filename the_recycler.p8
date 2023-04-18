@@ -301,30 +301,43 @@ function updt_plyr()
 		plyr.invul-=1
 	end
 	
+	ix=0
+	iy=0
+	
 	if btn(➡️) 
-	and plyr.x+plyr.speed<=120
 	and btn(⬅️)==false then
-		plyr.x+=plyr.speed
+		ix+=1
 		plyr.sprt=2
 		fsmax=23
 		fsmin=20
 	end
 	if btn(⬅️)
-	and plyr.x-plyr.speed>=0 
 	and btn(➡️)==false then
-	 plyr.x-=plyr.speed
+	 ix-=1
 	 plyr.sprt=1
 	 fsmax=23
 	 fsmin=20
 	end
-	if btn(⬆️)
-	and plyr.y-plyr.speed>=0 then
-		plyr.y-=plyr.speed
+	if btn(⬆️) then
+		iy-=1
 	end
-	if btn(⬇️)
-	and plyr.y+plyr.speed<=121 then
-		plyr.y+=plyr.speed
+	if btn(⬇️) then
+		iy+=1
 	end
+	
+	if (ix*ix+iy*iy>1) then
+  dist=sqrt(ix*ix+iy*iy)
+  ix/=dist
+  iy/=dist
+	end
+	
+	plyr.x+=ix*plyr.speed
+	plyr.y+=iy*plyr.speed
+	
+	if (plyr.y >= 121) plyr.y=120
+	if (plyr.y < 0) plyr.y=0
+	if (plyr.x >= 121) plyr.x=120
+	if (plyr.x < 0) plyr.x=0
 	
 	if btn(❎)
 	and plyr.timetoshoot==0
