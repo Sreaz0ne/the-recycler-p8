@@ -1296,7 +1296,7 @@ function init_dffclty()
 	need_drw_dffclty=false
 	t_2_increase_dffclty=0
 	dffclty_duration=2000
-	min_e_spwn_t=120
+	min_e_spwn_t=100
 	max_e_per_wave=10
 	dfflty_msg=nil
 	warning_duration=280
@@ -1389,17 +1389,17 @@ function increase_dffclty()
 	
 	if dtype==1 then
 		dfflty_msg="ENEMIES COME MORE OFTEN"
-		dffclty.e_spwn_time-=40
+		dffclty.e_spwn_time-=100
 		if (dffclty.e_spwn_time<min_e_spwn_t) dffclty.e_spwn_time=min_e_spwn_t
 	elseif dtype==2 then
-		dfflty_msg="MORE ENNEMIES COME"
+		dfflty_msg="MORE ENEMIES COME"
 		dffclty.e_per_wave+=1
 		if (dffclty.e_per_wave>max_e_per_wave) dffclty.e_per_wave=max_e_per_wave
 	elseif dtype==3 then
 		dfflty_msg="ENEMIES ARE MORE RESISTANT"
-		dffclty.e_hp+=1
+		dffclty.e_hp+=2
 	elseif dtype==4 then
-		dfflty_msg="ENEMIES ARE MORE STRONGER"
+		dfflty_msg="ENEMIES ARE STRONGER"
 		dffclty.e_dmg+=1
 	end
 	
