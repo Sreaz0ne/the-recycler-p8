@@ -148,6 +148,10 @@ function updt_game()
 		end
 		if (timetogo>0) timetogo-=1
 	else--upgrade menu
+		if vcmsfx==1 then
+			sfx(1,-2)
+			vcmsfx=0
+		end
 		updt_upgd()
 	end
 end
@@ -974,12 +978,19 @@ function init_vacumm_part()
 		
 		add(vcmpart,prt)
 	end
+	vcmsfx=0
 end
 
 function updt_vcm()
 	if (plyr.hp<=0) isvcm=0
 	
-	if (isvcm==0) plyr.speed=plyr.nspeed
+	if (isvcm==0) then
+		plyr.speed=plyr.nspeed
+		if vcmsfx==1 then
+		 sfx(1,-2)
+		 vcmsfx=0
+		end
+	end
 	
 	if isvcm==0 
 	and vcm.energy<vcm.gemax then
@@ -991,6 +1002,11 @@ function updt_vcm()
 	end
 	
 	if isvcm==1 then
+		
+		if (vcmsfx==0) then
+		 sfx(1)
+		 vcmsfx=1
+		end
 		plyr.speed=plyr.vspeed
 		vcm.energy-=vcm.dischargspeed
 		vcm.x=plyr.x
@@ -1672,4 +1688,4 @@ __label__
 
 __sfx__
 00010000375503c5503d5503b55037550325502c5502855025550215501d5501a55015550115500c5500855004550015501b50000500015000050000500035000150005500025000050001500015000150000500
-000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+000a0020036300d630086300e6300a630096300663009630036300b6300f630076300b630026300f6300663007630066300d630126300b6300e630096300763006630096300b6300c63007630066301063006630
