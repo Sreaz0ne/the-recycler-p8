@@ -724,7 +724,7 @@ function updt_bullets()
 				and plyr.hp>0 
 				and plyr.invul<=0
 				and b.btype=="e" then
-					
+					del(bullets,b)
 					plyr_take_dmg(1+dffclty.e_dmg)
 				end
 				
