@@ -261,9 +261,9 @@ function init_plyr()
 	plyr={
 		x=60,
 		y=90,
-		speed=1.1,
+		speed=1.3,
 		vspeed=0.4,
-		nspeed=1.1,
+		nspeed=1.3,
 		hp=3,
 		hpmax=3,
 		box={x1=2,x2=5,y1=1,y2=6},
