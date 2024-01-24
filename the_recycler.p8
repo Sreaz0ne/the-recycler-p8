@@ -226,23 +226,16 @@ end
 
 function create_stars()
 	stars={}
-	for i=1,30 do
-		star={
+	for i=1,60 do
+		local s={
 			x=flr(rnd(128)),
 			y=rnd(128),
-			col=13,
-			speed=0.80
-		}
-		add(stars,star)
-	end
-	for i=1,12 do
-		star={
-			x=rnd(128),
-			y=rnd(128),
 			col=7,
-			speed=2.80
+			speed=rnd(1.5)+0.5
 		}
-		add(stars,star)
+		if (s.speed < 1.2) s.col=13
+		if (s.speed < 0.7) s.col=1
+		add(stars,s)
 	end
 end
 
@@ -252,6 +245,10 @@ function updt_stars()
 		if s.y >= 128 then
 			s.y=-flr(rnd(128))
 			s.x=flr(rnd(128))
+			s.speed=rnd(1.5)+0.5
+			s.col=7
+			if (s.speed < 1) s.col=13
+			if (s.speed < 0.7) s.col=1
 		end
 	end
 end
