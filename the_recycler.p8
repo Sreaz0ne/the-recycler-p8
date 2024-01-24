@@ -112,6 +112,7 @@ function init_game()
 	scraps={}
 	init_dffclty()
 	time_2_spwn=0
+	impcts={}
 	
 	spwn_enemies(dffclty.e_per_wave)
 end
@@ -121,6 +122,7 @@ function updt_game()
 		
 		updt_stars()
 		updt_expls()
+		updt_impcts()
 		updt_enemies()
 		updt_scraps()
 		updt_plyr()
@@ -172,6 +174,8 @@ function draw_game()
 	drw_expls()
 	--enemies
 	drw_enemies()
+	--impacts
+	drw_impcts()
 	--ship
 	drw_plyr()
 	--vacuum cleaner
@@ -726,6 +730,7 @@ function updt_bullets()
 				for e in all(enemies) do
 					if coll(b,e) then
 						del(bullets,b)
+						add_impct(b.x+3.5,b.y,e.speed,3)
 						e_take_dmg(e,plyr.dmg)
 					end
 				end
@@ -736,6 +741,9 @@ function updt_bullets()
 				and plyr.invul<=0
 				and b.btype=="e" then
 					del(bullets,b)
+					local x=b.x+b.box.x2/2
+					local y=b.y+b.box.y2+0.1
+					add_impct(x,y,-0.5,8)
 					plyr_take_dmg(1+dffclty.e_dmg)
 				end
 				
@@ -1454,6 +1462,47 @@ function increase_dffclty()
 	need_increase_dffclty=false
 end
 
+-->8
+--impacts
+function add_impct(ix,iy,spd,dcol) 
+	local pmax=flr(rnd(6))+8
+	for p=1,pmax do
+		local impct={
+			x=ix,
+			y=iy,
+			xs=rnd(0.3),
+			xd=flr(rnd(2)),
+			ys=rnd(0.3)+0.2,
+			lt=flr(rnd(15))+10,
+			s=spd,
+			colr=dcol
+		}
+		add(impcts,impct)
+	end
+end
+
+function updt_impcts() 
+	for i in all(impcts) do
+		if i.xd==0 then
+			i.x-=i.xs
+		else
+			i.x+=i.xs
+		end
+		i.y+=i.ys+i.s
+		i.lt-=1
+		if (i.lt<11) i.colr=10
+		if (i.lt<7) i.colr=9
+		if (i.lt<4) i.colr=5
+		
+		if (i.lt==0) del(impcts,i)
+	end
+end
+
+function drw_impcts() 
+	for i in all(impcts) do
+		pset(i.x,i.y,i.colr)
+	end
+end
 __gfx__
 00066000000066000066000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 006ddd00000dd600006dd00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
