@@ -199,10 +199,9 @@ end
 
 function draw_gameover()
 	cls()
-	spr(192,0,0,16,4,false,true)
-	spr(192,0,32,16,4,true,false)
-	spr(192,0,64,16,4,true,false)
-	spr(192,0,96,16,4,false,true)
+	for s in all(stars) do
+		pset(s.x,s.y,s.col)
+	end
 	gmstr="game over"
 	scrstr="score: "..score
 	rstrtstr="press ❎/x to restart"
