@@ -199,6 +199,10 @@ end
 
 function draw_gameover()
 	cls()
+	spr(192,0,0,16,4,false,true)
+	spr(192,0,32,16,4,true,false)
+	spr(192,0,64,16,4,true,false)
+	spr(192,0,96,16,4,false,true)
 	gmstr="game over"
 	scrstr="score: "..score
 	rstrtstr="press ❎/x to restart"
@@ -206,7 +210,7 @@ function draw_gameover()
 		gmstr,
 		h_txt_cntr(gmstr),
 		v_txt_cntr()-14,
-		10
+		11
 	)
 	print(
 		scrstr,
