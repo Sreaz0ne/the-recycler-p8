@@ -730,7 +730,7 @@ function updt_bullets()
 				for e in all(enemies) do
 					if coll(b,e) then
 						del(bullets,b)
-						add_impct(b.x+3.5,b.y,e.speed,3)
+						add_impct(b)
 						e_take_dmg(e,plyr.dmg)
 					end
 				end
@@ -741,9 +741,7 @@ function updt_bullets()
 				and plyr.invul<=0
 				and b.btype=="e" then
 					del(bullets,b)
-					local x=b.x+b.box.x2/2
-					local y=b.y+b.box.y2+0.1
-					add_impct(x,y,-0.5,8)
+					add_impct(b)
 					plyr_take_dmg(1+dffclty.e_dmg)
 				end
 				
@@ -1464,7 +1462,38 @@ end
 
 -->8
 --impacts
-function add_impct(ix,iy,spd,dcol) 
+function add_impct(b) 
+	local i=abs_box(b)
+	local ix=i.x1+b.box.x2/2
+	local iy=i.y1+b.box.y2/2
+	if b.angl==0 then 
+		iy=i.y2
+	elseif b.angl==90 then
+		ix=i.x1
+	elseif b.angl==180 then
+		iy=i.y1
+	elseif	b.angl==270 then
+		ix=i.x2
+	elseif b.angl>0 and b.angl<90 then
+		ix=i.x1
+		iy=i.y2
+	elseif b.angl>90 and b.angl<180 then
+		ix=i.x1
+		iy=i.y1
+	elseif b.angl>180 and b.angl<270 then
+		ix=i.x2
+		iy=i.y1
+	elseif b.angl>270 and b.angl<360 then
+		ix=i.x2
+		iy=i.y2
+	end
+	
+	ix-= b.speed * sin(b.angl/360)
+	iy-= b.speed * cos(b.angl/360)
+	
+	local dcol=3
+	if (b.btype=="e") dcol=8
+	
 	local pmax=flr(rnd(6))+8
 	for p=1,pmax do
 		local impct={
@@ -1474,7 +1503,7 @@ function add_impct(ix,iy,spd,dcol)
 			xd=flr(rnd(2)),
 			ys=rnd(0.3)+0.2,
 			lt=flr(rnd(15))+10,
-			s=spd,
+			s=0,
 			colr=dcol
 		}
 		add(impcts,impct)
