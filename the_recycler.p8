@@ -174,10 +174,10 @@ function draw_game()
 	drw_expls()
 	--enemies
 	drw_enemies()
-	--impacts
-	drw_impcts()
 	--ship
 	drw_plyr()
+	--impacts
+	drw_impcts()
 	--vacuum cleaner
 	drw_vcm()
 	--bullets
@@ -730,7 +730,7 @@ function updt_bullets()
 				for e in all(enemies) do
 					if coll(b,e) then
 						del(bullets,b)
-						add_impct(b)
+						add_impct(e,b)
 						e_take_dmg(e,plyr.dmg)
 					end
 				end
@@ -741,7 +741,7 @@ function updt_bullets()
 				and plyr.invul<=0
 				and b.btype=="e" then
 					del(bullets,b)
-					add_impct(b)
+					add_impct(plyr,b)
 					plyr_take_dmg(1+dffclty.e_dmg)
 				end
 				
@@ -1462,48 +1462,123 @@ end
 
 -->8
 --impacts
-function add_impct(b) 
-	local i=abs_box(b)
-	local ix=i.x1+b.box.x2/2
-	local iy=i.y1+b.box.y2/2
-	if b.angl==0 then 
-		iy=i.y2
-	elseif b.angl==90 then
-		ix=i.x1
-	elseif b.angl==180 then
-		iy=i.y1
-	elseif	b.angl==270 then
-		ix=i.x2
-	elseif b.angl>0 and b.angl<90 then
-		ix=i.x1
-		iy=i.y2
-	elseif b.angl>90 and b.angl<180 then
-		ix=i.x1
-		iy=i.y1
-	elseif b.angl>180 and b.angl<270 then
-		ix=i.x2
-		iy=i.y1
-	elseif b.angl>270 and b.angl<360 then
-		ix=i.x2
-		iy=i.y2
-	end
+function add_impct(s,b) 
+	local pos_s=abs_box(s)
+	local pos_b=abs_box(b)
 	
-	ix-= b.speed * sin(b.angl/360)
-	iy-= b.speed * cos(b.angl/360)
 	
 	local dcol=3
 	if (b.btype=="e") dcol=8
 	
-	local pmax=flr(rnd(6))+8
+	local pmax=flr(rnd(10))+10
 	for p=1,pmax do
+		local ix,iy=0
+		local xdir,ydir=nil
+		--impact from top/bot
+		if pos_b.x1>=pos_s.x1
+		   and pos_b.x2<=pos_s.x2 then
+   ix=rnd(b.box.x2+0.00001)+pos_b.x1
+   if pos_b.y1<=pos_s.y2
+   		 and pos_b.y1>pos_s.y1 then
+   	iy=pos_s.y2+0.1
+   	ydir=2
+   else
+   	iy=pos_s.y1-0.1
+   	ydir=-1
+   end
+		else
+			--impact from left/right
+			if pos_b.y1>=pos_s.y1
+			   and pos_b.y2<=pos_s.y2 then
+	   iy=rnd(b.box.y2+0.00001)+pos_b.y1
+	   if pos_b.x1<=pos_s.x2
+	   		 and pos_b.x1>pos_s.x1 then
+	   	ix=pos_s.x2+0.1
+	   	xdir=1
+	   else
+	   	ix=pos_s.x1-0.1
+	   	xdir=-1
+	   end
+			else
+				--impact from both side
+				--top/left
+				if pos_b.x2>=pos_s.x1
+	   		 and pos_b.y2>=pos_s.y1
+	   		 and pos_b.x1<=pos_s.x1
+	   		 and pos_b.y1<=pos_s.y1 then
+	   	if p%2==0 then
+	   		ix=rnd(pos_b.x2-pos_s.x1+0.00001)+pos_s.x1
+	   		iy=pos_s.y1
+	   		ydir=-1
+	   	else
+	   		ix=pos_s.x1
+	   		iy=rnd(pos_b.y2-pos_s.y1+0.00001)+pos_s.y1
+	   		xdir=-1
+	   	end
+				end
+				--top/right
+				if pos_b.x1<=pos_s.x2
+	   		 and pos_b.y2>=pos_s.y1
+	   		 and pos_b.x2>=pos_s.x2
+	   		 and pos_b.y1<=pos_s.y1 then
+	   	if p%2==0 then
+	   		ix=rnd(pos_s.x2-pos_b.x1+0.00001)+pos_b.x1
+	   		iy=pos_s.y1
+	   		ydir=-1
+	   	else
+	   		ix=pos_s.x2
+	   		iy=rnd(pos_b.y2-pos_s.y1+0.00001)+pos_s.y1
+	   		xdir=1
+	   	end
+				end
+				--bot/right
+				if pos_b.x1<=pos_s.x2
+	   		 and pos_b.y2>=pos_s.y2
+	   		 and pos_b.x2>=pos_s.x2
+	   		 and pos_b.y1<=pos_s.y2 then
+	   	if p%2==0 then
+	   		ix=rnd(pos_s.x2-pos_b.x1+0.00001)+pos_b.x1
+	   		iy=pos_s.y2
+	   		ydir=2
+	   	else
+	   		ix=pos_s.x2
+	   		iy=rnd(pos_s.y2-pos_b.y1+0.00001)+pos_b.y1
+	   		xdir=1
+	   	end
+				end
+				--bot/left
+				if pos_b.x2>=pos_s.x1
+	   		 and pos_b.y1<=pos_s.y2
+	   		 and pos_b.x1<=pos_s.x1
+	   		 and pos_b.y2>=pos_s.y2 then
+	   	if p%2==0 then
+	   		ix=rnd(pos_b.x2-pos_s.x1+0.00001)+pos_s.x1
+	   		iy=pos_s.y2
+	   		ydir=2
+	   	else
+	   		ix=pos_s.x1
+	   		iy=rnd(pos_s.y2-pos_b.y1+0.00001)+pos_b.y1
+	   		xdir=-1
+	   	end
+				end
+			end
+		end
+		if (xdir==nil) then
+			xdir=flr(rnd(2))
+			if (xdir==0) xdir=-1
+		end
+		if (ydir==nil) then
+			ydir=flr(rnd(2))
+			if (ydir==0) ydir=-1
+		end
 		local impct={
 			x=ix,
 			y=iy,
-			xs=rnd(0.3),
-			xd=flr(rnd(2)),
-			ys=rnd(0.3)+0.2,
-			lt=flr(rnd(15))+10,
-			s=0,
+			xs=rnd(0.2)+0.2,
+			xd=xdir,
+			ys=rnd(0.2)+0.2,
+			yd=ydir,
+			lt=flr(rnd(6))+12,
 			colr=dcol
 		}
 		add(impcts,impct)
@@ -1512,16 +1587,13 @@ end
 
 function updt_impcts() 
 	for i in all(impcts) do
-		if i.xd==0 then
-			i.x-=i.xs
-		else
-			i.x+=i.xs
-		end
-		i.y+=i.ys+i.s
+		i.x+=i.xs*i.xd
+		i.y+=i.ys*i.yd
 		i.lt-=1
-		if (i.lt<11) i.colr=10
+		if (i.lt<10) i.colr=10
 		if (i.lt<7) i.colr=9
-		if (i.lt<4) i.colr=5
+		if (i.lt<5) i.colr=4
+		if (i.lt<2) i.colr=5
 		
 		if (i.lt==0) del(impcts,i)
 	end
