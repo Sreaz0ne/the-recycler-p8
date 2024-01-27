@@ -498,7 +498,7 @@ function get_e()
 		e.scre=50
 		add(e.gun,{
 			b=get_btype(49),
-			x=0,
+			x=1,
 			y=8
 		})
 		add(e.gun,{
