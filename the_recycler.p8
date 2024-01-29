@@ -286,7 +286,7 @@ function init_plyr()
 		ammo=30,
 		ammomax=30,
 		scraps=0,
-		smax=2,
+		smax=1,
 		gun={
 			{
 				b=get_btype(48),
@@ -444,91 +444,102 @@ function get_e()
 			sprt=nil,
 			gun={}
 	}
-	local r=flr(rnd(100))
-	if r>=0
-	and r<20 then
-		e.speed=0.3
-		e.hp=3+dffclty.e_hp
-		e.sprt=36
-		e.scre=75
-		add(e.gun,{
-			b=get_btype(49),
-			x=3,
-			y=8
-		})
-		add(e.gun,{
-			b=get_btype(56),
-			x=0,
-			y=3
-		})
-		e.gun[2].b.angl=60
-		add(e.gun,{
-			b=get_btype(56),
-			x=1,
-			y=5
-		})
-		e.gun[3].b.angl=30
-		add(e.gun,{
-			b=get_btype(56),
-			x=5,
-			y=3
-		})
-		e.gun[4].b.angl=300
-		add(e.gun,{
-			b=get_btype(56),
-			x=4,
-			y=5
-		})
-		e.gun[5].b.angl=330
-	elseif r>=20
-	and r<40 then
-		e.speed=0.4
-		e.hp=2+dffclty.e_hp
-		e.sprt=32
-		e.scre=25
-		add(e.gun,{
-			b=get_btype(49),
-			x=3,
-			y=8
-		})
-	elseif r>=40
-	and r<65 then
-		e.speed=0.3
-		e.hp=3+dffclty.e_hp
-		e.sprt=33
-		e.scre=50
-		add(e.gun,{
-			b=get_btype(49),
-			x=1,
-			y=8
-		})
-		add(e.gun,{
-			b=get_btype(49),
-			x=6,
-			y=8
-		})
- elseif r>=65
-	and r<85 then
-		e.speed=0.2
-		e.hp=4+dffclty.e_hp
-		e.sprt=34
-		e.scre=100
-		add(e.gun,{
-			b=get_btype(54),
-			x=2,
-			y=8
-		})
-	elseif r>=85
-	and r<100 then
-		e.speed=0.5
-		e.hp=4+dffclty.e_hp
-		e.sprt=35
-		e.scre=200
-		add(e.gun,{
-			b=get_btype(55),
-			x=2,
-			y=0
-		})
+	local e_found=false
+	while e_found==false do
+		local r=flr(rnd(100))
+		if r>=0
+		and r<20
+		and dffclty_lvl >= 2 then
+			e_found=true
+			e.speed=0.3
+			e.hp=3+dffclty.e_hp
+			e.sprt=36
+			e.scre=75
+			add(e.gun,{
+				b=get_btype(49),
+				x=3,
+				y=8
+			})
+			add(e.gun,{
+				b=get_btype(56),
+				x=0,
+				y=3
+			})
+			e.gun[2].b.angl=60
+			add(e.gun,{
+				b=get_btype(56),
+				x=1,
+				y=5
+			})
+			e.gun[3].b.angl=30
+			add(e.gun,{
+				b=get_btype(56),
+				x=5,
+				y=3
+			})
+			e.gun[4].b.angl=300
+			add(e.gun,{
+				b=get_btype(56),
+				x=4,
+				y=5
+			})
+			e.gun[5].b.angl=330
+		elseif r>=20
+		and r<40 then
+			e_found=true
+			e.speed=0.4
+			e.hp=2+dffclty.e_hp
+			e.sprt=32
+			e.scre=25
+			add(e.gun,{
+				b=get_btype(49),
+				x=3,
+				y=8
+			})
+		elseif r>=40
+		and r<65 then
+			e_found=true
+			e.speed=0.3
+			e.hp=3+dffclty.e_hp
+			e.sprt=33
+			e.scre=50
+			add(e.gun,{
+				b=get_btype(49),
+				x=1,
+				y=8
+			})
+			add(e.gun,{
+				b=get_btype(49),
+				x=6,
+				y=8
+			})
+	 elseif r>=65
+		and r<85
+		and dffclty_lvl >= 1 then
+			e_found=true
+			e.speed=0.2
+			e.hp=5+dffclty.e_hp
+			e.sprt=34
+			e.scre=100
+			add(e.gun,{
+				b=get_btype(54),
+				x=2,
+				y=8
+			})
+		elseif r>=85
+		and r<100
+		and dffclty_lvl >= 4 then
+			e_found=true
+			e.speed=0.5
+			e.hp=3+dffclty.e_hp
+			e.sprt=35
+			e.scre=200
+			add(e.gun,{
+				b=get_btype(55),
+				x=2,
+				y=0
+			})
+		end
 	end
 	return e
 end
@@ -1329,7 +1340,9 @@ function apply_upgd(up)
 	plyr.scraps=0
 	plyr.timetoshoot=11
 	plyr.smax=plyr.smax+scraptoaddonmax
-	scraptoaddonmax+=scraptoaddonmax
+	local s_to_add=flr(scraptoaddonmax/2)
+	if (s_to_add==0) s_to_add=1
+	scraptoaddonmax+=s_to_add
 	
 	hastochooseupgd=0
 	up1=nil
@@ -1354,6 +1367,7 @@ function init_dffclty()
 		e_hp=0,
 		e_dmg=0
 	}
+	dffclty_lvl=0
 	dsfx=false
 end
 
@@ -1456,6 +1470,8 @@ function increase_dffclty()
 		dfflty_msg="ENEMIES ARE STRONGER"
 		dffclty.e_dmg+=1
 	end
+	
+	dffclty_lvl+=1
 	
 	need_drw_dffclty=true
 	need_increase_dffclty=false
