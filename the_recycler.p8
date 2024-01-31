@@ -163,6 +163,8 @@ function updt_game()
 		end
 		
 		t+=1
+		if (t==32000) t=0
+		
 		if need_increase_dffclty==false
 		   and need_drw_dffclty==false then
 		   time_2_spwn+=1
