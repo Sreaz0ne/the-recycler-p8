@@ -493,12 +493,12 @@ function get_e()
 		local r=flr(rnd(100))
 		if r>=0
 		and r<20
-		and dffclty_lvl >= 2 then
+		and dffclty_lvl >= 4 then
 			e_found=true
 			e.speed=0.3
 			e.hp=3+dffclty.e_hp
 			e.sprt=36
-			e.scre=75
+			e.scre=300
 			add(e.gun,{
 				b=get_btype(49),
 				x=3,
@@ -534,7 +534,7 @@ function get_e()
 			e.speed=0.4
 			e.hp=2+dffclty.e_hp
 			e.sprt=32
-			e.scre=25
+			e.scre=50
 			add(e.gun,{
 				b=get_btype(49),
 				x=3,
@@ -546,7 +546,7 @@ function get_e()
 			e.speed=0.3
 			e.hp=3+dffclty.e_hp
 			e.sprt=33
-			e.scre=50
+			e.scre=100
 			add(e.gun,{
 				b=get_btype(49),
 				x=1,
@@ -564,7 +564,7 @@ function get_e()
 			e.speed=0.2
 			e.hp=5+dffclty.e_hp
 			e.sprt=34
-			e.scre=100
+			e.scre=200
 			add(e.gun,{
 				b=get_btype(54),
 				x=2,
@@ -577,7 +577,7 @@ function get_e()
 			e.speed=0.5
 			e.hp=3+dffclty.e_hp
 			e.sprt=35
-			e.scre=200
+			e.scre=150
 			add(e.gun,{
 				b=get_btype(55),
 				x=2,
