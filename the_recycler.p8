@@ -64,6 +64,18 @@ end
 function v_txt_cntr()
 	return 61
 end
+
+-- format score
+function format_score(s1,s2)
+	local score1txt=""
+	local score2txt=tostr(s2)
+	if s1>0 then
+	 score1txt=tostr(s1)
+	 score2txt="000"..score2txt
+	 score2txt=sub(score2txt,#score2txt-3,#score2txt)
+	end
+	return score1txt..score2txt
+end
 -->8
 --state functions
 
@@ -104,7 +116,8 @@ end
 -- ** game **
 function init_game()
 	t=0
-	score=0
+	score1=0
+	score2=0
 	bullets={}
 	enemies={}
 	init_plyr()
@@ -234,6 +247,7 @@ function draw_gameover()
 		pset(s.x,s.y,s.col)
 	end
 	gmstr="game over"
+	local score=format_score(score1,score2)
 	scrstr="score: "..score
 	rstrtstr="press ❎/x to restart"
 	print(
@@ -618,7 +632,11 @@ function e_take_dmg(e,dmg)
 		sfx(5)
 		explod_shp(e.x+4,e.y+4)
 		add_scrap(e.x,e.y,e.speed)
-		score+=e.scre
+		score2+=e.scre
+		if score2>=10000 then
+			score2-=10000
+			score1+=1
+		end
 		del(enemies,e)
 	end
 end
@@ -842,9 +860,10 @@ end
 --hud
 function drw_hud() 
 	--score
+	local score=format_score(score1,score2)
 	print(
 		score,
-		h_txt_cntr(tostr(score)),
+		h_txt_cntr(score),
 		2,
 		10
 	)
