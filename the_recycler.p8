@@ -818,8 +818,8 @@ end
 function chck_plyr_bllt()
 	for b in all(bullets) do
 		if (b.btype=="p") return 1
-		return 0
 	end
+	return 0
 end
 
 function bomb_expld(b)
