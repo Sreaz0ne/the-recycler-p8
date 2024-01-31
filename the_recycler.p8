@@ -1449,7 +1449,8 @@ function updt_dffclty()
 	end
 	
 	if need_increase_dffclty
-	   and #enemies==0 then
+	   and #enemies==0
+	   and plyr.hp>0  then
 	   local be=false
 	   for b in all(bullets) do
 	   	if b.btype=="b"
