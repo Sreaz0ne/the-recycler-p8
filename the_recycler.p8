@@ -160,6 +160,7 @@ function updt_game()
 		and plyr.hp<=0 
 		and chck_plyr_bllt()==0 then
 			state=2
+			music(16)
 		end
 		
 		t+=1
@@ -185,6 +186,7 @@ function updt_game()
 					music_isplaying=true
 		end
 		
+		if (time_to_drw_dffclty>0) time_to_drw_dffclty-=1
 		if (timetogo>0) timetogo-=1
 	else--upgrade menu
 		if vcmsfx==1 then
@@ -233,9 +235,10 @@ end
 
 -- ** game over **
 function updt_gameover()
-	music(-1)
+	
 	if btn(❎)
 	and isshting==0 then
+		music(-1,1000)
 	 init_game()
 	elseif btn(❎)==false
 	   and isshting==1 then
@@ -444,6 +447,7 @@ function plyr_take_dmg(dmg)
 			sfx(2)
 			--time to game over
 			timetogo=100
+			music(-1,2000)
 		else
 			plyr.invul=120
 		end
@@ -1420,9 +1424,18 @@ function init_dffclty()
 	}
 	dffclty_lvl=0
 	dsfx=false
+	time_to_drw_dffclty=-1
 end
 
 function updt_dffclty()
+
+	if time_to_drw_dffclty==0
+	  and need_increase_dffclty==true then
+	  need_increase_dffclty=false
+	  need_drw_dffclty=true
+	  time_to_drw_dffclty=-1
+	end
+
 	if t_2_increase_dffclty==dffclty_duration
 	   and plyr.hp>0 then
 		need_increase_dffclty=true
@@ -1451,6 +1464,7 @@ function updt_dffclty()
 	end
 	
 	if need_increase_dffclty
+	   and time_to_drw_dffclty==-1
 	   and #enemies==0
 	   and plyr.hp>0  then
 	   local be=false
@@ -1467,7 +1481,7 @@ function updt_dffclty()
 end
 
 function drw_dffclty()
-
+	
 	if need_drw_dffclty 
 				and sin(crrent_wrnng_time/60)<0.4 then
 		spr(96,02,23,2,2)
@@ -1526,8 +1540,7 @@ function increase_dffclty()
 	
 	dffclty_lvl+=1
 	
-	need_drw_dffclty=true
-	need_increase_dffclty=false
+	time_to_drw_dffclty=60
 end
 
 -->8
@@ -1956,6 +1969,8 @@ __sfx__
 011000000303003010030150303003010030150303003010030150303003010030150303003010030300301503030030100301503030030100301503030030100301503030030100301503030030100303003015
 011000000003000010001150003000010001150003000010001150003000010001150003000110000300011500030000100011500030000100011500030000100011500030000100011500030001100003000115
 011000000005000020000250005000020000250005000020000250005000020000250005000020000500002500050000200002500050000200002500050000200002500050000200002500050000200005000025
+000f0000155501255011550125500f55012550105500e550105500f5500c5500e5500c55008550065500555004550035500155000500005000050000500005000050000500005000050000500005000050000500
+010f0000150451204511025120450f04512025100450e045100250f0450c0450e0250c04508025060450502504045030250104500005000050000500005000050000500005000050000500005000050000500005
 __music__
 00 15555644
 00 14155644
@@ -1973,7 +1988,7 @@ __music__
 02 1a194344
 00 41424344
 00 41424344
-01 57585744
+01 1e1f5744
 00 57585a44
 00 57585944
 00 575c4344
